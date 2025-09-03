@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-09-04 Thu 04:46 -->
+<!-- 2025-09-04 Thu 04:52 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>High Level Design - System Design</title>
@@ -55,131 +55,131 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orge209ed6">1. High Level Design (HLD)</a></li>
-<li><a href="#orgd633f0a">2. Network Protocols</a>
+<li><a href="#orgf4fce8e">1. High Level Design (HLD)</a></li>
+<li><a href="#org41b8d8a">2. Network Protocols</a>
 <ul>
-<li><a href="#org0cf8c4e">2.1. Application Layer</a>
+<li><a href="#orgb86f10b">2.1. Application Layer</a>
 <ul>
-<li><a href="#org918bdff">2.1.1. Client Server Protocols</a></li>
-<li><a href="#org1c72dba">2.1.2. Peer-to-Peer (P2P) Protocols</a></li>
+<li><a href="#orgc9f371d">2.1.1. Client Server Protocols</a></li>
+<li><a href="#orgfa2e9e3">2.1.2. Peer-to-Peer (P2P) Protocols</a></li>
 </ul>
 </li>
-<li><a href="#org96b1bce">2.2. Transport Layer</a>
+<li><a href="#org5bbd83a">2.2. Transport Layer</a>
 <ul>
-<li><a href="#org2e222d0">2.2.1. TCP/IP</a></li>
-<li><a href="#org279ca28">2.2.2. UDP</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#org491cb19">3. CAP Theorem</a>
-<ul>
-<li><a href="#org56aa112">3.1. CA: Consistency and Availability</a></li>
-<li><a href="#org2083894">3.2. CP: Consistency and Partition Tolerance</a></li>
-<li><a href="#org6c4b2e8">3.3. AP: Availability and Partition Tolerance</a></li>
-</ul>
-</li>
-<li><a href="#orga4af57b">4. Components</a>
-<ul>
-<li><a href="#org948fdde">4.1. Load Balancers</a>
-<ul>
-<li><a href="#orgc95242a">4.1.1. Types</a></li>
-<li><a href="#org45af4a4">4.1.2. Problems</a></li>
-</ul>
-</li>
-<li><a href="#orgc85a49d">4.2. Caching</a></li>
-<li><a href="#orgf8c8d42">4.3. Content Delivery Network (CDN)</a></li>
-<li><a href="#org561c631">4.4. API Gateways</a></li>
-<li><a href="#orgdbf57d9">4.5. Key-Value Stores</a></li>
-<li><a href="#org03c2fb6">4.6. Rate Limiters</a></li>
-<li><a href="#org43d7e46">4.7. Monitoring Systems</a></li>
-<li><a href="#orgfc731db">4.8. Messaging Queues</a></li>
-<li><a href="#org5666fbb">4.9. Distributed Unique ID Generator</a></li>
-<li><a href="#org8eb11a8">4.10. Distributed Task Schedulers</a></li>
-</ul>
-</li>
-<li><a href="#org309165c">5. Some Important Terms</a>
-<ul>
-<li><a href="#org14cc676">5.1. Throughput</a></li>
-<li><a href="#org7dcbe42">5.2. Latency</a></li>
-<li><a href="#orga2c3794">5.3. Availability</a></li>
-</ul>
-</li>
-<li><a href="#org6b52f93">6. Scalability</a>
-<ul>
-<li><a href="#org5ebacf6">6.1. What is scalability?</a>
-<ul>
-<li><a href="#orgbf1b899">6.1.1. Vertical Scaling</a></li>
-<li><a href="#orgb65c809">6.1.2. Horizontal Scaling</a></li>
+<li><a href="#org0263267">2.2.1. TCP/IP</a></li>
+<li><a href="#org9ee497d">2.2.2. UDP</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgdabf877">7. Consistent Hashing</a>
+<li><a href="#orgcfb88cd">3. CAP Theorem</a>
 <ul>
-<li><a href="#org0d49f35">7.1. Hashing</a></li>
-<li><a href="#orgfb09338">7.2. Consistent Hashing</a></li>
+<li><a href="#orgb314747">3.1. CA: Consistency and Availability</a></li>
+<li><a href="#org6468c41">3.2. CP: Consistency and Partition Tolerance</a></li>
+<li><a href="#orgf93946c">3.3. AP: Availability and Partition Tolerance</a></li>
 </ul>
 </li>
-<li><a href="#org878bd3a">8. Database Sharding</a>
+<li><a href="#org07ab327">4. Components</a>
 <ul>
-<li><a href="#org9531fe8">8.1. Sharding Methods</a>
+<li><a href="#org91102a8">4.1. Load Balancers</a>
 <ul>
-<li><a href="#orgedc3580">8.1.1. Key Based Sharding</a></li>
-<li><a href="#orgd96c47f">8.1.2. Range Based Sharding</a></li>
-<li><a href="#orgf70ae93">8.1.3. Vertical Sharding</a></li>
+<li><a href="#org9da1e61">4.1.1. Types</a></li>
+<li><a href="#org170460a">4.1.2. Problems</a></li>
+</ul>
+</li>
+<li><a href="#org67f7925">4.2. Caching</a></li>
+<li><a href="#org09f2d51">4.3. Content Delivery Network (CDN)</a></li>
+<li><a href="#org3f059c6">4.4. API Gateways</a></li>
+<li><a href="#orgf02e4f6">4.5. Key-Value Stores</a></li>
+<li><a href="#org3edcc4f">4.6. Rate Limiters</a></li>
+<li><a href="#org12c887f">4.7. Monitoring Systems</a></li>
+<li><a href="#org8b8d4dd">4.8. Messaging Queues</a></li>
+<li><a href="#orgab1f9e9">4.9. Distributed Unique ID Generator</a></li>
+<li><a href="#orgc96cde7">4.10. Distributed Task Schedulers</a></li>
+</ul>
+</li>
+<li><a href="#org2999ae9">5. Some Important Terms</a>
+<ul>
+<li><a href="#org06849ef">5.1. Throughput</a></li>
+<li><a href="#orgf067b8f">5.2. Latency</a></li>
+<li><a href="#orgcabf15a">5.3. Availability</a></li>
+</ul>
+</li>
+<li><a href="#org972784e">6. Scalability</a>
+<ul>
+<li><a href="#orgfffcdd5">6.1. What is scalability?</a>
+<ul>
+<li><a href="#org99bbd17">6.1.1. Vertical Scaling</a></li>
+<li><a href="#orgc5be4dd">6.1.2. Horizontal Scaling</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org47ae952">9. Caching</a>
+<li><a href="#org751b594">7. Consistent Hashing</a>
 <ul>
-<li><a href="#orge06c00f">9.1. Types of Cache</a>
+<li><a href="#org57ea79c">7.1. Hashing</a></li>
+<li><a href="#orgb2d28fa">7.2. Consistent Hashing</a></li>
+</ul>
+</li>
+<li><a href="#orga184926">8. Database Sharding</a>
 <ul>
-<li><a href="#orgfbf4134">9.1.1. Application Server Cache</a></li>
-<li><a href="#org6a796c1">9.1.2. Distributed Cache</a></li>
-<li><a href="#org18b4f89">9.1.3. Global Cache</a></li>
+<li><a href="#orgd0a42f1">8.1. Sharding Methods</a>
+<ul>
+<li><a href="#org36efc65">8.1.1. Key Based Sharding</a></li>
+<li><a href="#org99b713d">8.1.2. Range Based Sharding</a></li>
+<li><a href="#org23889a9">8.1.3. Vertical Sharding</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org0faa18d">10. Single Point of Failure</a>
+<li><a href="#orgfab0e70">9. Caching</a>
 <ul>
-<li><a href="#org4663f30">10.1. Example</a></li>
+<li><a href="#org518c5c9">9.1. Types of Cache</a>
+<ul>
+<li><a href="#orgd48ff11">9.1.1. Application Server Cache</a></li>
+<li><a href="#org055eeff">9.1.2. Distributed Cache</a></li>
+<li><a href="#orge815eb3">9.1.3. Global Cache</a></li>
 </ul>
 </li>
-<li><a href="#org1f61917">11. NoSQL Databases</a>
+</ul>
+</li>
+<li><a href="#org8f31bdc">10. Single Point of Failure</a>
 <ul>
-<li><a href="#orgff67a01">11.1. Advantages</a></li>
-<li><a href="#org12068eb">11.2. Disadvantages</a></li>
-<li><a href="#org08a4262">11.3. When should I use SQL DBs?</a></li>
-<li><a href="#org0a1ea9f">11.4. When should I use NoSQL DBs?</a></li>
+<li><a href="#org51b9889">10.1. Example</a></li>
+</ul>
+</li>
+<li><a href="#orgeecb96a">11. NoSQL Databases</a>
+<ul>
+<li><a href="#org75b8f90">11.1. Advantages</a></li>
+<li><a href="#orge6c51f2">11.2. Disadvantages</a></li>
+<li><a href="#orgf9fe22f">11.3. When should I use SQL DBs?</a></li>
+<li><a href="#org05c4255">11.4. When should I use NoSQL DBs?</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orge209ed6" class="outline-2">
-<h2 id="orge209ed6"><span class="section-number-2">1.</span> High Level Design (HLD)</h2>
+<div id="outline-container-orgf4fce8e" class="outline-2">
+<h2 id="orgf4fce8e"><span class="section-number-2">1.</span> High Level Design (HLD)</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 It lays out the overall architecture of a system, which describes how components interact with each other, what services exist, and how data flows among them.
 </p>
 </div>
 </div>
-<div id="outline-container-orgd633f0a" class="outline-2">
-<h2 id="orgd633f0a"><span class="section-number-2">2.</span> Network Protocols</h2>
+<div id="outline-container-org41b8d8a" class="outline-2">
+<h2 id="org41b8d8a"><span class="section-number-2">2.</span> Network Protocols</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 A network protocol defines the rules for the communication between two computers.
 </p>
 </div>
-<div id="outline-container-org0cf8c4e" class="outline-3">
-<h3 id="org0cf8c4e"><span class="section-number-3">2.1.</span> Application Layer</h3>
+<div id="outline-container-orgb86f10b" class="outline-3">
+<h3 id="orgb86f10b"><span class="section-number-3">2.1.</span> Application Layer</h3>
 <div class="outline-text-3" id="text-2-1">
 </div>
-<div id="outline-container-org918bdff" class="outline-4">
-<h4 id="org918bdff"><span class="section-number-4">2.1.1.</span> Client Server Protocols</h4>
+<div id="outline-container-orgc9f371d" class="outline-4">
+<h4 id="orgc9f371d"><span class="section-number-4">2.1.1.</span> Client Server Protocols</h4>
 <div class="outline-text-4" id="text-2-1-1">
 <p>
 There exists a server and multiple clients that connect to these servers.  
@@ -209,8 +209,8 @@ Mostly used for messaging services.</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org1c72dba" class="outline-4">
-<h4 id="org1c72dba"><span class="section-number-4">2.1.2.</span> Peer-to-Peer (P2P) Protocols</h4>
+<div id="outline-container-orgfa2e9e3" class="outline-4">
+<h4 id="orgfa2e9e3"><span class="section-number-4">2.1.2.</span> Peer-to-Peer (P2P) Protocols</h4>
 <div class="outline-text-4" id="text-2-1-2">
 <p>
 The clients and servers, all of them can talk to each other which makes it fast.
@@ -221,15 +221,15 @@ The clients and servers, all of them can talk to each other which makes it fast.
 </div>
 </div>
 </div>
-<div id="outline-container-org96b1bce" class="outline-3">
-<h3 id="org96b1bce"><span class="section-number-3">2.2.</span> Transport Layer</h3>
+<div id="outline-container-org5bbd83a" class="outline-3">
+<h3 id="org5bbd83a"><span class="section-number-3">2.2.</span> Transport Layer</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 These are used to send data over IP networks.
 </p>
 </div>
-<div id="outline-container-org2e222d0" class="outline-4">
-<h4 id="org2e222d0"><span class="section-number-4">2.2.1.</span> TCP/IP</h4>
+<div id="outline-container-org0263267" class="outline-4">
+<h4 id="org0263267"><span class="section-number-4">2.2.1.</span> TCP/IP</h4>
 <div class="outline-text-4" id="text-2-2-1">
 <ul class="org-ul">
 <li>Transmission control protocol</li>
@@ -241,8 +241,8 @@ These are used to send data over IP networks.
 </ul>
 </div>
 </div>
-<div id="outline-container-org279ca28" class="outline-4">
-<h4 id="org279ca28"><span class="section-number-4">2.2.2.</span> UDP</h4>
+<div id="outline-container-org9ee497d" class="outline-4">
+<h4 id="org9ee497d"><span class="section-number-4">2.2.2.</span> UDP</h4>
 <div class="outline-text-4" id="text-2-2-2">
 <ul class="org-ul">
 <li>User datagram protocol</li>
@@ -255,8 +255,8 @@ These are used to send data over IP networks.
 </div>
 </div>
 </div>
-<div id="outline-container-org491cb19" class="outline-2">
-<h2 id="org491cb19"><span class="section-number-2">3.</span> CAP Theorem</h2>
+<div id="outline-container-orgcfb88cd" class="outline-2">
+<h2 id="orgcfb88cd"><span class="section-number-2">3.</span> CAP Theorem</h2>
 <div class="outline-text-2" id="text-3">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -288,8 +288,8 @@ Partition tolerance means that the system can continue to operate even if the ne
 In real world distributed systems, you always have to choose between CP and AP.
 </p>
 </div>
-<div id="outline-container-org56aa112" class="outline-3">
-<h3 id="org56aa112"><span class="section-number-3">3.1.</span> CA: Consistency and Availability</h3>
+<div id="outline-container-orgb314747" class="outline-3">
+<h3 id="orgb314747"><span class="section-number-3">3.1.</span> CA: Consistency and Availability</h3>
 <div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li>Impractical in real distributed systems because you really need partition tolerance, as network partitions are unavoidable.</li>
@@ -297,8 +297,8 @@ In real world distributed systems, you always have to choose between CP and AP.
 </ul>
 </div>
 </div>
-<div id="outline-container-org2083894" class="outline-3">
-<h3 id="org2083894"><span class="section-number-3">3.2.</span> CP: Consistency and Partition Tolerance</h3>
+<div id="outline-container-org6468c41" class="outline-3">
+<h3 id="org6468c41"><span class="section-number-3">3.2.</span> CP: Consistency and Partition Tolerance</h3>
 <div class="outline-text-3" id="text-3-2">
 <ul class="org-ul">
 <li>System prefers correctness over uptime</li>
@@ -307,8 +307,8 @@ In real world distributed systems, you always have to choose between CP and AP.
 </ul>
 </div>
 </div>
-<div id="outline-container-org6c4b2e8" class="outline-3">
-<h3 id="org6c4b2e8"><span class="section-number-3">3.3.</span> AP: Availability and Partition Tolerance</h3>
+<div id="outline-container-orgf93946c" class="outline-3">
+<h3 id="orgf93946c"><span class="section-number-3">3.3.</span> AP: Availability and Partition Tolerance</h3>
 <div class="outline-text-3" id="text-3-3">
 <ul class="org-ul">
 <li>System prefers availability.</li>
@@ -320,12 +320,12 @@ In real world distributed systems, you always have to choose between CP and AP.
 </div>
 </div>
 </div>
-<div id="outline-container-orga4af57b" class="outline-2">
-<h2 id="orga4af57b"><span class="section-number-2">4.</span> Components</h2>
+<div id="outline-container-org07ab327" class="outline-2">
+<h2 id="org07ab327"><span class="section-number-2">4.</span> Components</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-org948fdde" class="outline-3">
-<h3 id="org948fdde"><span class="section-number-3">4.1.</span> Load Balancers</h3>
+<div id="outline-container-org91102a8" class="outline-3">
+<h3 id="org91102a8"><span class="section-number-3">4.1.</span> Load Balancers</h3>
 <div class="outline-text-3" id="text-4-1">
 <ul class="org-ul">
 <li>A load balancer distributes requests evenly across different servers.</li>
@@ -335,8 +335,8 @@ In real world distributed systems, you always have to choose between CP and AP.
 <li>They enable <b>horizontal scaling</b>.</li>
 </ul>
 </div>
-<div id="outline-container-orgc95242a" class="outline-4">
-<h4 id="orgc95242a"><span class="section-number-4">4.1.1.</span> Types</h4>
+<div id="outline-container-org9da1e61" class="outline-4">
+<h4 id="org9da1e61"><span class="section-number-4">4.1.1.</span> Types</h4>
 <div class="outline-text-4" id="text-4-1-1">
 <ul class="org-ul">
 <li>Hardware LB - Specialized devices</li>
@@ -346,8 +346,8 @@ In real world distributed systems, you always have to choose between CP and AP.
 </ul>
 </div>
 </div>
-<div id="outline-container-org45af4a4" class="outline-4">
-<h4 id="org45af4a4"><span class="section-number-4">4.1.2.</span> Problems</h4>
+<div id="outline-container-org170460a" class="outline-4">
+<h4 id="org170460a"><span class="section-number-4">4.1.2.</span> Problems</h4>
 <div class="outline-text-4" id="text-4-1-2">
 <ul class="org-ul">
 <li>Single point of failure: If the load balancer itself has some issues then..</li>
@@ -357,8 +357,8 @@ In real world distributed systems, you always have to choose between CP and AP.
 </div>
 </div>
 </div>
-<div id="outline-container-orgc85a49d" class="outline-3">
-<h3 id="orgc85a49d"><span class="section-number-3">4.2.</span> Caching</h3>
+<div id="outline-container-org67f7925" class="outline-3">
+<h3 id="org67f7925"><span class="section-number-3">4.2.</span> Caching</h3>
 <div class="outline-text-3" id="text-4-2">
 <ul class="org-ul">
 <li>A technique for temporarily storing frequently requested data for quick access.</li>
@@ -367,8 +367,8 @@ In real world distributed systems, you always have to choose between CP and AP.
 </ul>
 </div>
 </div>
-<div id="outline-container-orgf8c8d42" class="outline-3">
-<h3 id="orgf8c8d42"><span class="section-number-3">4.3.</span> Content Delivery Network (CDN)</h3>
+<div id="outline-container-org09f2d51" class="outline-3">
+<h3 id="org09f2d51"><span class="section-number-3">4.3.</span> Content Delivery Network (CDN)</h3>
 <div class="outline-text-3" id="text-4-3">
 <ul class="org-ul">
 <li>A CDN is a specialized network of <b>servers</b>, which hosts media files like images, videos, audios, webpages, or other stuff.</li>
@@ -376,8 +376,8 @@ In real world distributed systems, you always have to choose between CP and AP.
 </ul>
 </div>
 </div>
-<div id="outline-container-org561c631" class="outline-3">
-<h3 id="org561c631"><span class="section-number-3">4.4.</span> API Gateways</h3>
+<div id="outline-container-org3f059c6" class="outline-3">
+<h3 id="org3f059c6"><span class="section-number-3">4.4.</span> API Gateways</h3>
 <div class="outline-text-3" id="text-4-4">
 <ul class="org-ul">
 <li>An API gateway provides an interface for clients to access different services of a backend system.</li>
@@ -385,8 +385,8 @@ In real world distributed systems, you always have to choose between CP and AP.
 </ul>
 </div>
 </div>
-<div id="outline-container-orgdbf57d9" class="outline-3">
-<h3 id="orgdbf57d9"><span class="section-number-3">4.5.</span> Key-Value Stores</h3>
+<div id="outline-container-orgf02e4f6" class="outline-3">
+<h3 id="orgf02e4f6"><span class="section-number-3">4.5.</span> Key-Value Stores</h3>
 <div class="outline-text-3" id="text-4-5">
 <ul class="org-ul">
 <li>They store values in key-value pairs just like hashmaps do.</li>
@@ -394,8 +394,8 @@ In real world distributed systems, you always have to choose between CP and AP.
 </ul>
 </div>
 </div>
-<div id="outline-container-org03c2fb6" class="outline-3">
-<h3 id="org03c2fb6"><span class="section-number-3">4.6.</span> Rate Limiters</h3>
+<div id="outline-container-org3edcc4f" class="outline-3">
+<h3 id="org3edcc4f"><span class="section-number-3">4.6.</span> Rate Limiters</h3>
 <div class="outline-text-3" id="text-4-6">
 <ul class="org-ul">
 <li>They restrict the rate at which a system or application responds to requests.</li>
@@ -403,16 +403,16 @@ In real world distributed systems, you always have to choose between CP and AP.
 </ul>
 </div>
 </div>
-<div id="outline-container-org43d7e46" class="outline-3">
-<h3 id="org43d7e46"><span class="section-number-3">4.7.</span> Monitoring Systems</h3>
+<div id="outline-container-org12c887f" class="outline-3">
+<h3 id="org12c887f"><span class="section-number-3">4.7.</span> Monitoring Systems</h3>
 <div class="outline-text-3" id="text-4-7">
 <ul class="org-ul">
 <li>These systems are used to collect and analyze various metrics like performance data.</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgfc731db" class="outline-3">
-<h3 id="orgfc731db"><span class="section-number-3">4.8.</span> Messaging Queues</h3>
+<div id="outline-container-org8b8d4dd" class="outline-3">
+<h3 id="org8b8d4dd"><span class="section-number-3">4.8.</span> Messaging Queues</h3>
 <div class="outline-text-3" id="text-4-8">
 <ul class="org-ul">
 <li>They allow communication between two components of a system using a queue (FIFO).</li>
@@ -422,16 +422,16 @@ In real world distributed systems, you always have to choose between CP and AP.
 </ul>
 </div>
 </div>
-<div id="outline-container-org5666fbb" class="outline-3">
-<h3 id="org5666fbb"><span class="section-number-3">4.9.</span> Distributed Unique ID Generator</h3>
+<div id="outline-container-orgab1f9e9" class="outline-3">
+<h3 id="orgab1f9e9"><span class="section-number-3">4.9.</span> Distributed Unique ID Generator</h3>
 <div class="outline-text-3" id="text-4-9">
 <ul class="org-ul">
 <li>They create unique IDs to help identify different components of a distributed system.</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org8eb11a8" class="outline-3">
-<h3 id="org8eb11a8"><span class="section-number-3">4.10.</span> Distributed Task Schedulers</h3>
+<div id="outline-container-orgc96cde7" class="outline-3">
+<h3 id="orgc96cde7"><span class="section-number-3">4.10.</span> Distributed Task Schedulers</h3>
 <div class="outline-text-3" id="text-4-10">
 <ul class="org-ul">
 <li>Responsible for scheduling and executing tasks in a distributed system.</li>
@@ -439,12 +439,12 @@ In real world distributed systems, you always have to choose between CP and AP.
 </div>
 </div>
 </div>
-<div id="outline-container-org309165c" class="outline-2">
-<h2 id="org309165c"><span class="section-number-2">5.</span> Some Important Terms</h2>
+<div id="outline-container-org2999ae9" class="outline-2">
+<h2 id="org2999ae9"><span class="section-number-2">5.</span> Some Important Terms</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-org14cc676" class="outline-3">
-<h3 id="org14cc676"><span class="section-number-3">5.1.</span> Throughput</h3>
+<div id="outline-container-org06849ef" class="outline-3">
+<h3 id="org06849ef"><span class="section-number-3">5.1.</span> Throughput</h3>
 <div class="outline-text-3" id="text-5-1">
 <ul class="org-ul">
 <li>Throughput is defined as the amount of information processed in a certain period of time.</li>
@@ -454,8 +454,8 @@ In real world distributed systems, you always have to choose between CP and AP.
 </ul>
 </div>
 </div>
-<div id="outline-container-org7dcbe42" class="outline-3">
-<h3 id="org7dcbe42"><span class="section-number-3">5.2.</span> Latency</h3>
+<div id="outline-container-orgf067b8f" class="outline-3">
+<h3 id="orgf067b8f"><span class="section-number-3">5.2.</span> Latency</h3>
 <div class="outline-text-3" id="text-5-2">
 <ul class="org-ul">
 <li>Amount of time required for a single packet of information to be delivered.</li>
@@ -469,8 +469,8 @@ In real world distributed systems, you always have to choose between CP and AP.
 </ul>
 </div>
 </div>
-<div id="outline-container-orga2c3794" class="outline-3">
-<h3 id="orga2c3794"><span class="section-number-3">5.3.</span> Availability</h3>
+<div id="outline-container-orgcabf15a" class="outline-3">
+<h3 id="orgcabf15a"><span class="section-number-3">5.3.</span> Availability</h3>
 <div class="outline-text-3" id="text-5-3">
 <ul class="org-ul">
 <li>The amount of time a system is available which is measured as - \(availability = \frac{uptime}{uptime + downtime}\)</li>
@@ -478,12 +478,12 @@ In real world distributed systems, you always have to choose between CP and AP.
 </div>
 </div>
 </div>
-<div id="outline-container-org6b52f93" class="outline-2">
-<h2 id="org6b52f93"><span class="section-number-2">6.</span> Scalability</h2>
+<div id="outline-container-org972784e" class="outline-2">
+<h2 id="org972784e"><span class="section-number-2">6.</span> Scalability</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-org5ebacf6" class="outline-3">
-<h3 id="org5ebacf6"><span class="section-number-3">6.1.</span> What is scalability?</h3>
+<div id="outline-container-orgfffcdd5" class="outline-3">
+<h3 id="orgfffcdd5"><span class="section-number-3">6.1.</span> What is scalability?</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 An application is said to be scalable if it is able to support growth or manage increasing workload without compromising performance. It helps in - 
@@ -495,8 +495,8 @@ An application is said to be scalable if it is able to support growth or manage 
 <li>Managing growth</li>
 </ul>
 </div>
-<div id="outline-container-orgbf1b899" class="outline-4">
-<h4 id="orgbf1b899"><span class="section-number-4">6.1.1.</span> Vertical Scaling</h4>
+<div id="outline-container-org99bbd17" class="outline-4">
+<h4 id="org99bbd17"><span class="section-number-4">6.1.1.</span> Vertical Scaling</h4>
 <div class="outline-text-4" id="text-6-1-1">
 <ul class="org-ul">
 <li>Just buy a better server, or add more power to your server like adding more RAM, better CPU, more storage, etc..</li>
@@ -504,8 +504,8 @@ An application is said to be scalable if it is able to support growth or manage 
 </ul>
 </div>
 </div>
-<div id="outline-container-orgb65c809" class="outline-4">
-<h4 id="orgb65c809"><span class="section-number-4">6.1.2.</span> Horizontal Scaling</h4>
+<div id="outline-container-orgc5be4dd" class="outline-4">
+<h4 id="orgc5be4dd"><span class="section-number-4">6.1.2.</span> Horizontal Scaling</h4>
 <div class="outline-text-4" id="text-6-1-2">
 <ul class="org-ul">
 <li>Buy more servers and form a network.</li>
@@ -517,15 +517,15 @@ An application is said to be scalable if it is able to support growth or manage 
 </div>
 </div>
 </div>
-<div id="outline-container-orgdabf877" class="outline-2">
-<h2 id="orgdabf877"><span class="section-number-2">7.</span> Consistent Hashing</h2>
+<div id="outline-container-org751b594" class="outline-2">
+<h2 id="org751b594"><span class="section-number-2">7.</span> Consistent Hashing</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 It is a technique commonly used to balance load across servers in a load balancer. It's mainly used to balance load across distributed databases.
 </p>
 </div>
-<div id="outline-container-org0d49f35" class="outline-3">
-<h3 id="org0d49f35"><span class="section-number-3">7.1.</span> Hashing</h3>
+<div id="outline-container-org57ea79c" class="outline-3">
+<h3 id="org57ea79c"><span class="section-number-3">7.1.</span> Hashing</h3>
 <div class="outline-text-3" id="text-7-1">
 <ul class="org-ul">
 <li>A load balancer could use a hashing function to determine which node to store the data on.</li>
@@ -536,8 +536,8 @@ It is a technique commonly used to balance load across servers in a load balance
 </ul>
 </div>
 </div>
-<div id="outline-container-orgfb09338" class="outline-3">
-<h3 id="orgfb09338"><span class="section-number-3">7.2.</span> Consistent Hashing</h3>
+<div id="outline-container-orgb2d28fa" class="outline-3">
+<h3 id="orgb2d28fa"><span class="section-number-3">7.2.</span> Consistent Hashing</h3>
 <div class="outline-text-3" id="text-7-2">
 <ul class="org-ul">
 <li>We imagine that our servers are spread across a clock (1-12).</li>
@@ -552,8 +552,8 @@ It is a technique commonly used to balance load across servers in a load balance
 </div>
 </div>
 </div>
-<div id="outline-container-org878bd3a" class="outline-2">
-<h2 id="org878bd3a"><span class="section-number-2">8.</span> Database Sharding</h2>
+<div id="outline-container-orga184926" class="outline-2">
+<h2 id="orga184926"><span class="section-number-2">8.</span> Database Sharding</h2>
 <div class="outline-text-2" id="text-8">
 <ul class="org-ul">
 <li>Used for horizontal scaling of databases.</li>
@@ -561,12 +561,12 @@ It is a technique commonly used to balance load across servers in a load balance
 <li>Each chunk is called a "shard" where each shard has the same database schema as the other shards.</li>
 </ul>
 </div>
-<div id="outline-container-org9531fe8" class="outline-3">
-<h3 id="org9531fe8"><span class="section-number-3">8.1.</span> Sharding Methods</h3>
+<div id="outline-container-orgd0a42f1" class="outline-3">
+<h3 id="orgd0a42f1"><span class="section-number-3">8.1.</span> Sharding Methods</h3>
 <div class="outline-text-3" id="text-8-1">
 </div>
-<div id="outline-container-orgedc3580" class="outline-4">
-<h4 id="orgedc3580"><span class="section-number-4">8.1.1.</span> Key Based Sharding</h4>
+<div id="outline-container-org36efc65" class="outline-4">
+<h4 id="org36efc65"><span class="section-number-4">8.1.1.</span> Key Based Sharding</h4>
 <div class="outline-text-4" id="text-8-1-1">
 <ul class="org-ul">
 <li>Also known as hash-based sharding.</li>
@@ -576,8 +576,8 @@ It is a technique commonly used to balance load across servers in a load balance
 </ul>
 </div>
 </div>
-<div id="outline-container-orgd96c47f" class="outline-4">
-<h4 id="orgd96c47f"><span class="section-number-4">8.1.2.</span> Range Based Sharding</h4>
+<div id="outline-container-org99b713d" class="outline-4">
+<h4 id="org99b713d"><span class="section-number-4">8.1.2.</span> Range Based Sharding</h4>
 <div class="outline-text-4" id="text-8-1-2">
 <ul class="org-ul">
 <li>Also known as horizontal sharding.</li>
@@ -586,8 +586,8 @@ It is a technique commonly used to balance load across servers in a load balance
 </ul>
 </div>
 </div>
-<div id="outline-container-orgf70ae93" class="outline-4">
-<h4 id="orgf70ae93"><span class="section-number-4">8.1.3.</span> Vertical Sharding</h4>
+<div id="outline-container-org23889a9" class="outline-4">
+<h4 id="org23889a9"><span class="section-number-4">8.1.3.</span> Vertical Sharding</h4>
 <div class="outline-text-4" id="text-8-1-3">
 <ul class="org-ul">
 <li>Instead of spliting by rows, we split by columns.</li>
@@ -597,8 +597,8 @@ It is a technique commonly used to balance load across servers in a load balance
 </div>
 </div>
 </div>
-<div id="outline-container-org47ae952" class="outline-2">
-<h2 id="org47ae952"><span class="section-number-2">9.</span> Caching</h2>
+<div id="outline-container-orgfab0e70" class="outline-2">
+<h2 id="orgfab0e70"><span class="section-number-2">9.</span> Caching</h2>
 <div class="outline-text-2" id="text-9">
 <ul class="org-ul">
 <li>Caching is a technique which allows you to answer frequently asked queries faster.</li>
@@ -611,12 +611,12 @@ It is a technique commonly used to balance load across servers in a load balance
 <li>A bad caching policy can cause a lot of cache misses, which is known as "thrashing".</li>
 </ul>
 </div>
-<div id="outline-container-orge06c00f" class="outline-3">
-<h3 id="orge06c00f"><span class="section-number-3">9.1.</span> Types of Cache</h3>
+<div id="outline-container-org518c5c9" class="outline-3">
+<h3 id="org518c5c9"><span class="section-number-3">9.1.</span> Types of Cache</h3>
 <div class="outline-text-3" id="text-9-1">
 </div>
-<div id="outline-container-orgfbf4134" class="outline-4">
-<h4 id="orgfbf4134"><span class="section-number-4">9.1.1.</span> Application Server Cache</h4>
+<div id="outline-container-orgd48ff11" class="outline-4">
+<h4 id="orgd48ff11"><span class="section-number-4">9.1.1.</span> Application Server Cache</h4>
 <div class="outline-text-4" id="text-9-1-1">
 <p>
 The server itself has a small cache. The advantage is that the response is instant. The drawback is that each server node has its own cache, so consistency is harder to maintain and maintaining consistency will slow things down.
@@ -624,29 +624,29 @@ The server itself has a small cache. The advantage is that the response is insta
 </p>
 </div>
 </div>
-<div id="outline-container-org6a796c1" class="outline-4">
-<h4 id="org6a796c1"><span class="section-number-4">9.1.2.</span> Distributed Cache</h4>
+<div id="outline-container-org055eeff" class="outline-4">
+<h4 id="org055eeff"><span class="section-number-4">9.1.2.</span> Distributed Cache</h4>
 <div class="outline-text-4" id="text-9-1-2">
 <ul class="org-ul">
 <li>Consistent hashing is used to determine which cache node has the requested data.</li>
 <li>Each server can now independently use the distributed cache system.</li>
 </ul>
 
-<div id="orge4b5d2e" class="figure">
+<div id="orgb8159c8" class="figure">
 <p><img src="https://media.geeksforgeeks.org/wp-content/uploads/20240110183539/Distributed-Cache.jpg" alt="Distributed-Cache.jpg" />
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-org18b4f89" class="outline-4">
-<h4 id="org18b4f89"><span class="section-number-4">9.1.3.</span> Global Cache</h4>
+<div id="outline-container-orge815eb3" class="outline-4">
+<h4 id="orge815eb3"><span class="section-number-4">9.1.3.</span> Global Cache</h4>
 <div class="outline-text-4" id="text-9-1-3">
 <ul class="org-ul">
 <li>There's just ONE global cache which is queried whenever data is requested.</li>
 <li>It is the responsibility of the global cache to query the DB in case of a cache miss.</li>
 </ul>
 
-<div id="orgfbddc20" class="figure">
+<div id="org7d52ba9" class="figure">
 <p><img src="https://media.geeksforgeeks.org/wp-content/uploads/20240110183609/Global-Cache.jpg" alt="Global-Cache.jpg" />
 </p>
 </div>
@@ -654,8 +654,8 @@ The server itself has a small cache. The advantage is that the response is insta
 </div>
 </div>
 </div>
-<div id="outline-container-org0faa18d" class="outline-2">
-<h2 id="org0faa18d"><span class="section-number-2">10.</span> Single Point of Failure</h2>
+<div id="outline-container-org8f31bdc" class="outline-2">
+<h2 id="org8f31bdc"><span class="section-number-2">10.</span> Single Point of Failure</h2>
 <div class="outline-text-2" id="text-10">
 <ul class="org-ul">
 <li>A single point of failure occurs when you have a system where there is one component which fails and due to that, the entire system goes down.</li>
@@ -663,8 +663,8 @@ The server itself has a small cache. The advantage is that the response is insta
 <li>Single point of failure applies to server nodes, databases, load balancers, or literally anything that is a component of a system.</li>
 </ul>
 </div>
-<div id="outline-container-org4663f30" class="outline-3">
-<h3 id="org4663f30"><span class="section-number-3">10.1.</span> Example</h3>
+<div id="outline-container-org51b9889" class="outline-3">
+<h3 id="org51b9889"><span class="section-number-3">10.1.</span> Example</h3>
 <div class="outline-text-3" id="text-10-1">
 <ul class="org-ul">
 <li>Let's say we have a simple system
@@ -687,8 +687,8 @@ We also had to add a DNS service which allows clients to connect to a load balan
 </div>
 </div>
 </div>
-<div id="outline-container-org1f61917" class="outline-2">
-<h2 id="org1f61917"><span class="section-number-2">11.</span> NoSQL Databases</h2>
+<div id="outline-container-orgeecb96a" class="outline-2">
+<h2 id="orgeecb96a"><span class="section-number-2">11.</span> NoSQL Databases</h2>
 <div class="outline-text-2" id="text-11">
 <ul class="org-ul">
 <li>You've studied about SQL databases in DBMS, you know how they require you to model all relationships as tables.</li>
@@ -697,8 +697,8 @@ We also had to add a DNS service which allows clients to connect to a load balan
 <li>Many of them are key-value based, graph based etc..</li>
 </ul>
 </div>
-<div id="outline-container-orgff67a01" class="outline-3">
-<h3 id="orgff67a01"><span class="section-number-3">11.1.</span> Advantages</h3>
+<div id="outline-container-org75b8f90" class="outline-3">
+<h3 id="org75b8f90"><span class="section-number-3">11.1.</span> Advantages</h3>
 <div class="outline-text-3" id="text-11-1">
 <ul class="org-ul">
 <li>They are horizontally scalable (SQL dbs are vertically scalable).</li>
@@ -707,8 +707,8 @@ We also had to add a DNS service which allows clients to connect to a load balan
 </ul>
 </div>
 </div>
-<div id="outline-container-org12068eb" class="outline-3">
-<h3 id="org12068eb"><span class="section-number-3">11.2.</span> Disadvantages</h3>
+<div id="outline-container-orge6c51f2" class="outline-3">
+<h3 id="orge6c51f2"><span class="section-number-3">11.2.</span> Disadvantages</h3>
 <div class="outline-text-3" id="text-11-2">
 <ul class="org-ul">
 <li>ACID properties are not guaranteed.</li>
@@ -719,8 +719,8 @@ We also had to add a DNS service which allows clients to connect to a load balan
 </ul>
 </div>
 </div>
-<div id="outline-container-org08a4262" class="outline-3">
-<h3 id="org08a4262"><span class="section-number-3">11.3.</span> When should I use SQL DBs?</h3>
+<div id="outline-container-orgf9fe22f" class="outline-3">
+<h3 id="orgf9fe22f"><span class="section-number-3">11.3.</span> When should I use SQL DBs?</h3>
 <div class="outline-text-3" id="text-11-3">
 <ul class="org-ul">
 <li>When you need strong ACID properties. For example, banking systems (transactions), inventory management, payments etc..</li>
@@ -731,8 +731,8 @@ We also had to add a DNS service which allows clients to connect to a load balan
 </ul>
 </div>
 </div>
-<div id="outline-container-org0a1ea9f" class="outline-3">
-<h3 id="org0a1ea9f"><span class="section-number-3">11.4.</span> When should I use NoSQL DBs?</h3>
+<div id="outline-container-org05c4255" class="outline-3">
+<h3 id="org05c4255"><span class="section-number-3">11.4.</span> When should I use NoSQL DBs?</h3>
 <div class="outline-text-3" id="text-11-4">
 <ul class="org-ul">
 <li>When you have flexible, evolving schemas or unstructured data. For example, storing analytics, json documents, etc.</li>
@@ -759,7 +759,7 @@ When you need low latency at massive scale.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Prayag Jain</p>
-<p class="date">Created: 2025-09-04 Thu 04:46</p>
+<p class="date">Created: 2025-09-04 Thu 04:52</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
