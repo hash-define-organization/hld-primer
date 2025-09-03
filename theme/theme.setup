@@ -1,0 +1,10 @@
+# -*- mode: org; -*-
+
+#+OPTIONS: html-style:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="./theme/css/htmlize.css"/>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="./theme/css/define.css"/>
+
+#+HTML_HEAD: <script type="text/javascript" src="./theme/lib/js/jquery.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="./theme/lib/js/bootstrap.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="./theme/lib/js/jquery.stickytableheaders.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="./theme/js/define.js"></script>

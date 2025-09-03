@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-09-04 Thu 04:46 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>High Level Design - System Design</title>
+<meta name="author" content="Prayag Jain" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="./theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="./theme/css/define.css"/>
+<script type="text/javascript" src="./theme/lib/js/jquery.min.js"></script>
+<script type="text/javascript" src="./theme/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./theme/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="./theme/js/define.js"></script>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">High Level Design - System Design</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orge209ed6">1. High Level Design (HLD)</a></li>
+<li><a href="#orgd633f0a">2. Network Protocols</a>
+<ul>
+<li><a href="#org0cf8c4e">2.1. Application Layer</a>
+<ul>
+<li><a href="#org918bdff">2.1.1. Client Server Protocols</a></li>
+<li><a href="#org1c72dba">2.1.2. Peer-to-Peer (P2P) Protocols</a></li>
+</ul>
+</li>
+<li><a href="#org96b1bce">2.2. Transport Layer</a>
+<ul>
+<li><a href="#org2e222d0">2.2.1. TCP/IP</a></li>
+<li><a href="#org279ca28">2.2.2. UDP</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org491cb19">3. CAP Theorem</a>
+<ul>
+<li><a href="#org56aa112">3.1. CA: Consistency and Availability</a></li>
+<li><a href="#org2083894">3.2. CP: Consistency and Partition Tolerance</a></li>
+<li><a href="#org6c4b2e8">3.3. AP: Availability and Partition Tolerance</a></li>
+</ul>
+</li>
+<li><a href="#orga4af57b">4. Components</a>
+<ul>
+<li><a href="#org948fdde">4.1. Load Balancers</a>
+<ul>
+<li><a href="#orgc95242a">4.1.1. Types</a></li>
+<li><a href="#org45af4a4">4.1.2. Problems</a></li>
+</ul>
+</li>
+<li><a href="#orgc85a49d">4.2. Caching</a></li>
+<li><a href="#orgf8c8d42">4.3. Content Delivery Network (CDN)</a></li>
+<li><a href="#org561c631">4.4. API Gateways</a></li>
+<li><a href="#orgdbf57d9">4.5. Key-Value Stores</a></li>
+<li><a href="#org03c2fb6">4.6. Rate Limiters</a></li>
+<li><a href="#org43d7e46">4.7. Monitoring Systems</a></li>
+<li><a href="#orgfc731db">4.8. Messaging Queues</a></li>
+<li><a href="#org5666fbb">4.9. Distributed Unique ID Generator</a></li>
+<li><a href="#org8eb11a8">4.10. Distributed Task Schedulers</a></li>
+</ul>
+</li>
+<li><a href="#org309165c">5. Some Important Terms</a>
+<ul>
+<li><a href="#org14cc676">5.1. Throughput</a></li>
+<li><a href="#org7dcbe42">5.2. Latency</a></li>
+<li><a href="#orga2c3794">5.3. Availability</a></li>
+</ul>
+</li>
+<li><a href="#org6b52f93">6. Scalability</a>
+<ul>
+<li><a href="#org5ebacf6">6.1. What is scalability?</a>
+<ul>
+<li><a href="#orgbf1b899">6.1.1. Vertical Scaling</a></li>
+<li><a href="#orgb65c809">6.1.2. Horizontal Scaling</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgdabf877">7. Consistent Hashing</a>
+<ul>
+<li><a href="#org0d49f35">7.1. Hashing</a></li>
+<li><a href="#orgfb09338">7.2. Consistent Hashing</a></li>
+</ul>
+</li>
+<li><a href="#org878bd3a">8. Database Sharding</a>
+<ul>
+<li><a href="#org9531fe8">8.1. Sharding Methods</a>
+<ul>
+<li><a href="#orgedc3580">8.1.1. Key Based Sharding</a></li>
+<li><a href="#orgd96c47f">8.1.2. Range Based Sharding</a></li>
+<li><a href="#orgf70ae93">8.1.3. Vertical Sharding</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org47ae952">9. Caching</a>
+<ul>
+<li><a href="#orge06c00f">9.1. Types of Cache</a>
+<ul>
+<li><a href="#orgfbf4134">9.1.1. Application Server Cache</a></li>
+<li><a href="#org6a796c1">9.1.2. Distributed Cache</a></li>
+<li><a href="#org18b4f89">9.1.3. Global Cache</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org0faa18d">10. Single Point of Failure</a>
+<ul>
+<li><a href="#org4663f30">10.1. Example</a></li>
+</ul>
+</li>
+<li><a href="#org1f61917">11. NoSQL Databases</a>
+<ul>
+<li><a href="#orgff67a01">11.1. Advantages</a></li>
+<li><a href="#org12068eb">11.2. Disadvantages</a></li>
+<li><a href="#org08a4262">11.3. When should I use SQL DBs?</a></li>
+<li><a href="#org0a1ea9f">11.4. When should I use NoSQL DBs?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orge209ed6" class="outline-2">
+<h2 id="orge209ed6"><span class="section-number-2">1.</span> High Level Design (HLD)</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+It lays out the overall architecture of a system, which describes how components interact with each other, what services exist, and how data flows among them.
+</p>
+</div>
+</div>
+<div id="outline-container-orgd633f0a" class="outline-2">
+<h2 id="orgd633f0a"><span class="section-number-2">2.</span> Network Protocols</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+A network protocol defines the rules for the communication between two computers.
+</p>
+</div>
+<div id="outline-container-org0cf8c4e" class="outline-3">
+<h3 id="org0cf8c4e"><span class="section-number-3">2.1.</span> Application Layer</h3>
+<div class="outline-text-3" id="text-2-1">
+</div>
+<div id="outline-container-org918bdff" class="outline-4">
+<h4 id="org918bdff"><span class="section-number-4">2.1.1.</span> Client Server Protocols</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<p>
+There exists a server and multiple clients that connect to these servers.  
+The clients send requests to the server and the server sends a response.
+</p>
+<ul class="org-ul">
+<li>HTTP
+<ul class="org-ul">
+<li>Hyper text transfer protocol.</li>
+<li>One connection is created.</li>
+</ul></li>
+<li>FTP
+<ul class="org-ul">
+<li>File transfer protocol.</li>
+<li>Two connections are created (control connection, data connection).</li>
+<li>Control connection is persistent while data connection may disconnect.</li>
+</ul></li>
+<li>SMTP
+<ul class="org-ul">
+<li>Simple mail transfer protocol</li>
+<li>Used for sending emails</li>
+<li>IMAP is used for receiving emails</li>
+</ul></li>
+<li>Web sockets
+Bi-directional; the server can send requests as well.
+Mostly used for messaging services.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1c72dba" class="outline-4">
+<h4 id="org1c72dba"><span class="section-number-4">2.1.2.</span> Peer-to-Peer (P2P) Protocols</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<p>
+The clients and servers, all of them can talk to each other which makes it fast.
+</p>
+<ul class="org-ul">
+<li>WebRTC</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org96b1bce" class="outline-3">
+<h3 id="org96b1bce"><span class="section-number-3">2.2.</span> Transport Layer</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+These are used to send data over IP networks.
+</p>
+</div>
+<div id="outline-container-org2e222d0" class="outline-4">
+<h4 id="org2e222d0"><span class="section-number-4">2.2.1.</span> TCP/IP</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<ul class="org-ul">
+<li>Transmission control protocol</li>
+<li>It provides a reliable, connection oriented delivery (handshakes).</li>
+<li>The order in which data packets are sent is preserved.</li>
+<li>If a data packet is not received, it is requested again.</li>
+<li>Latency is higher.</li>
+<li>Used for file transfer, web (HTTP/HTTPS), email, SSH</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org279ca28" class="outline-4">
+<h4 id="org279ca28"><span class="section-number-4">2.2.2.</span> UDP</h4>
+<div class="outline-text-4" id="text-2-2-2">
+<ul class="org-ul">
+<li>User datagram protocol</li>
+<li>It is unreliable because there is no re-transmission of lost data packets.</li>
+<li>Order is not preserved.</li>
+<li>Lower latency</li>
+<li>Used for gaming, VoIP, streaming, broadcast</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org491cb19" class="outline-2">
+<h2 id="org491cb19"><span class="section-number-2">3.</span> CAP Theorem</h2>
+<div class="outline-text-2" id="text-3">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Really fun introduction to cap theorem: <a href="http://ksat.me/a-plain-english-introduction-to-cap-theorem">http://ksat.me/a-plain-english-introduction-to-cap-theorem</a></td>
+</tr>
+</tbody>
+</table>
+
+<p>
+This theorem allows us to choose the right database for our application. It states that any database can have just two of these three properties. No database can exhibit all three of these properties simultaneously. So when choosing a db, you have to compromise on one of these properties.
+</p>
+<ul class="org-ul">
+<li>C: Consistency
+This is different from the consistency mention in "ACID". Here, it means that in all the nodes of a distributed system, each node has the same, consistent view of the replicated data.
+For example, if there are 3 nodes in a distributed database, then all nodes must have the same data. If data is modified in one, it should be reflected in all other nodes.</li>
+<li>A: Availability
+Every node, must be able to respond in a reasonable amount of time. If a node wants to interact with another node, it should always be able to do so. In other words, every request should get a response (and not an error).</li>
+<li>P: Partition Tolerance
+Partition tolerance means that the system can continue to operate even if the network has some fault causing problems in communication between two nodes.</li>
+</ul>
+
+<p>
+In real world distributed systems, you always have to choose between CP and AP.
+</p>
+</div>
+<div id="outline-container-org56aa112" class="outline-3">
+<h3 id="org56aa112"><span class="section-number-3">3.1.</span> CA: Consistency and Availability</h3>
+<div class="outline-text-3" id="text-3-1">
+<ul class="org-ul">
+<li>Impractical in real distributed systems because you really need partition tolerance, as network partitions are unavoidable.</li>
+<li>Good for single node dbs on a single machine</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org2083894" class="outline-3">
+<h3 id="org2083894"><span class="section-number-3">3.2.</span> CP: Consistency and Partition Tolerance</h3>
+<div class="outline-text-3" id="text-3-2">
+<ul class="org-ul">
+<li>System prefers correctness over uptime</li>
+<li>The nodes may refuse requests untill consistency is restored.</li>
+<li>Examples: HBase, MongoDB</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org6c4b2e8" class="outline-3">
+<h3 id="org6c4b2e8"><span class="section-number-3">3.3.</span> AP: Availability and Partition Tolerance</h3>
+<div class="outline-text-3" id="text-3-3">
+<ul class="org-ul">
+<li>System prefers availability.</li>
+<li>Preferred when you don't always need to show the latest data. For example, you don't really need to see the most accurate Instagram follower count. It will eventually be updated so it's fine.</li>
+<li>The system is always available.</li>
+<li>I really like this one.</li>
+<li>Eg: Cassandra, DynamoDB, CouchDB, DNS</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orga4af57b" class="outline-2">
+<h2 id="orga4af57b"><span class="section-number-2">4.</span> Components</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-org948fdde" class="outline-3">
+<h3 id="org948fdde"><span class="section-number-3">4.1.</span> Load Balancers</h3>
+<div class="outline-text-3" id="text-4-1">
+<ul class="org-ul">
+<li>A load balancer distributes requests evenly across different servers.</li>
+<li>So if there are a lot of requests, a load balancer will send different requests to different servers evenly, so that no server is overloaded.</li>
+<li>It may be a networking device or a software application.</li>
+<li>If a server fails, the load balancer routes requests to servers in good condition instead.</li>
+<li>They enable <b>horizontal scaling</b>.</li>
+</ul>
+</div>
+<div id="outline-container-orgc95242a" class="outline-4">
+<h4 id="orgc95242a"><span class="section-number-4">4.1.1.</span> Types</h4>
+<div class="outline-text-4" id="text-4-1-1">
+<ul class="org-ul">
+<li>Hardware LB - Specialized devices</li>
+<li>Software LB - Just applications that work as load balancers</li>
+<li>Cloud LB - Services you can buy online to balance load (AWS, Google Cloud and Azure provide this)</li>
+<li>there are more&#x2026; go search..</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org45af4a4" class="outline-4">
+<h4 id="org45af4a4"><span class="section-number-4">4.1.2.</span> Problems</h4>
+<div class="outline-text-4" id="text-4-1-2">
+<ul class="org-ul">
+<li>Single point of failure: If the load balancer itself has some issues then..</li>
+<li>Maybe expensive</li>
+<li>Configuring them is a challenge</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc85a49d" class="outline-3">
+<h3 id="orgc85a49d"><span class="section-number-3">4.2.</span> Caching</h3>
+<div class="outline-text-3" id="text-4-2">
+<ul class="org-ul">
+<li>A technique for temporarily storing frequently requested data for quick access.</li>
+<li>Sending requests to databases can be slower, so caching some data helps speed up things.</li>
+<li>Specialized caching software is used like Redis, which stores this temporary data in RAM which is fast.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgf8c8d42" class="outline-3">
+<h3 id="orgf8c8d42"><span class="section-number-3">4.3.</span> Content Delivery Network (CDN)</h3>
+<div class="outline-text-3" id="text-4-3">
+<ul class="org-ul">
+<li>A CDN is a specialized network of <b>servers</b>, which hosts media files like images, videos, audios, webpages, or other stuff.</li>
+<li>Whenever a client requests this type of data, the request is handled by a nearby CDN server which has cached copy of this content, instead of the main server.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org561c631" class="outline-3">
+<h3 id="org561c631"><span class="section-number-3">4.4.</span> API Gateways</h3>
+<div class="outline-text-3" id="text-4-4">
+<ul class="org-ul">
+<li>An API gateway provides an interface for clients to access different services of a backend system.</li>
+<li>It has routes which the client can send requests to for different purposes and receive a response.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgdbf57d9" class="outline-3">
+<h3 id="orgdbf57d9"><span class="section-number-3">4.5.</span> Key-Value Stores</h3>
+<div class="outline-text-3" id="text-4-5">
+<ul class="org-ul">
+<li>They store values in key-value pairs just like hashmaps do.</li>
+<li>If it is a persistent store, the data is saved on disk.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org03c2fb6" class="outline-3">
+<h3 id="org03c2fb6"><span class="section-number-3">4.6.</span> Rate Limiters</h3>
+<div class="outline-text-3" id="text-4-6">
+<ul class="org-ul">
+<li>They restrict the rate at which a system or application responds to requests.</li>
+<li>These can help prevent DDoS attacks.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org43d7e46" class="outline-3">
+<h3 id="org43d7e46"><span class="section-number-3">4.7.</span> Monitoring Systems</h3>
+<div class="outline-text-3" id="text-4-7">
+<ul class="org-ul">
+<li>These systems are used to collect and analyze various metrics like performance data.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgfc731db" class="outline-3">
+<h3 id="orgfc731db"><span class="section-number-3">4.8.</span> Messaging Queues</h3>
+<div class="outline-text-3" id="text-4-8">
+<ul class="org-ul">
+<li>They allow communication between two components of a system using a queue (FIFO).</li>
+<li>One service sends a message to the queue and then goes back to doing its work.</li>
+<li>The service which needs to act on this message receives it and does the required action.</li>
+<li>Both are independent of each other and don't need to interact directly.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org5666fbb" class="outline-3">
+<h3 id="org5666fbb"><span class="section-number-3">4.9.</span> Distributed Unique ID Generator</h3>
+<div class="outline-text-3" id="text-4-9">
+<ul class="org-ul">
+<li>They create unique IDs to help identify different components of a distributed system.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org8eb11a8" class="outline-3">
+<h3 id="org8eb11a8"><span class="section-number-3">4.10.</span> Distributed Task Schedulers</h3>
+<div class="outline-text-3" id="text-4-10">
+<ul class="org-ul">
+<li>Responsible for scheduling and executing tasks in a distributed system.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org309165c" class="outline-2">
+<h2 id="org309165c"><span class="section-number-2">5.</span> Some Important Terms</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-org14cc676" class="outline-3">
+<h3 id="org14cc676"><span class="section-number-3">5.1.</span> Throughput</h3>
+<div class="outline-text-3" id="text-5-1">
+<ul class="org-ul">
+<li>Throughput is defined as the amount of information processed in a certain period of time.</li>
+<li>You can think of it like the number of actions performed per unit of time.</li>
+<li>Higher throughput is considered better.</li>
+<li>Unit is <b>bits per second</b>.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7dcbe42" class="outline-3">
+<h3 id="org7dcbe42"><span class="section-number-3">5.2.</span> Latency</h3>
+<div class="outline-text-3" id="text-5-2">
+<ul class="org-ul">
+<li>Amount of time required for a single packet of information to be delivered.</li>
+<li>It is measured in milliseconds.</li>
+<li>Generally, we aim for high throughput and decent latency.</li>
+<li>It mainly depends on -
+<ul class="org-ul">
+<li>Network delays</li>
+<li>Delays due to mathematical calculations</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orga2c3794" class="outline-3">
+<h3 id="orga2c3794"><span class="section-number-3">5.3.</span> Availability</h3>
+<div class="outline-text-3" id="text-5-3">
+<ul class="org-ul">
+<li>The amount of time a system is available which is measured as - \(availability = \frac{uptime}{uptime + downtime}\)</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org6b52f93" class="outline-2">
+<h2 id="org6b52f93"><span class="section-number-2">6.</span> Scalability</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-org5ebacf6" class="outline-3">
+<h3 id="org5ebacf6"><span class="section-number-3">6.1.</span> What is scalability?</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+An application is said to be scalable if it is able to support growth or manage increasing workload without compromising performance. It helps in - 
+</p>
+<ul class="org-ul">
+<li>Ensuring availability</li>
+<li>Maintaining cost effectiveness</li>
+<li>Increasing performance</li>
+<li>Managing growth</li>
+</ul>
+</div>
+<div id="outline-container-orgbf1b899" class="outline-4">
+<h4 id="orgbf1b899"><span class="section-number-4">6.1.1.</span> Vertical Scaling</h4>
+<div class="outline-text-4" id="text-6-1-1">
+<ul class="org-ul">
+<li>Just buy a better server, or add more power to your server like adding more RAM, better CPU, more storage, etc..</li>
+<li>At a certain point, you can no longer benefit from vertical scaling.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb65c809" class="outline-4">
+<h4 id="orgb65c809"><span class="section-number-4">6.1.2.</span> Horizontal Scaling</h4>
+<div class="outline-text-4" id="text-6-1-2">
+<ul class="org-ul">
+<li>Buy more servers and form a network.</li>
+<li>The queries will be distributed among all the servers by a load balancer.</li>
+<li>Requests are a little slower but this scales very well, you just have to add more servers.</li>
+<li>Data duplication is required to maintain consistency or you just don't have consistency.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgdabf877" class="outline-2">
+<h2 id="orgdabf877"><span class="section-number-2">7.</span> Consistent Hashing</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+It is a technique commonly used to balance load across servers in a load balancer. It's mainly used to balance load across distributed databases.
+</p>
+</div>
+<div id="outline-container-org0d49f35" class="outline-3">
+<h3 id="org0d49f35"><span class="section-number-3">7.1.</span> Hashing</h3>
+<div class="outline-text-3" id="text-7-1">
+<ul class="org-ul">
+<li>A load balancer could use a hashing function to determine which node to store the data on.</li>
+<li>For instance, if you had three databases, then a simple hash function <code>k % 3</code> would determine the target db's index.</li>
+<li>For example, for user <code>4</code>, the data would be stored on server <code>4 % 3</code> which is <code>1</code>.</li>
+<li>Now if let's say you want to add another database node, you would have to shift ALL the data because the hash function would provide you a different value.</li>
+<li>This is problematic and may be very expensive if there is a LOT of data.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgfb09338" class="outline-3">
+<h3 id="orgfb09338"><span class="section-number-3">7.2.</span> Consistent Hashing</h3>
+<div class="outline-text-3" id="text-7-2">
+<ul class="org-ul">
+<li>We imagine that our servers are spread across a clock (1-12).</li>
+<li>There are 3 servers at positions 1, 3 and 9.</li>
+<li>Let's say our hash function returned <code>8</code>. There's no server at position 8, so moving clockwise, it would reach server 9.</li>
+<li>So we can do this for all requests.</li>
+<li>Let's say another node is added on position <code>7</code>.</li>
+<li>Previously, for hash values 4, 5, 6, 7 and 8, all data was stored in server 9.</li>
+<li>But now the values 4, 5, 6, and 7 should correspond to the server at position 7, so we just have to some data present in server 9 to server 7.</li>
+<li>We can leave other DBs unchanged, which saved us cost and time.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org878bd3a" class="outline-2">
+<h2 id="org878bd3a"><span class="section-number-2">8.</span> Database Sharding</h2>
+<div class="outline-text-2" id="text-8">
+<ul class="org-ul">
+<li>Used for horizontal scaling of databases.</li>
+<li>A database with a lot of records is split into smaller databases, for example, one DB with 1 million rows could be split into five DBs with 200K rows each.</li>
+<li>Each chunk is called a "shard" where each shard has the same database schema as the other shards.</li>
+</ul>
+</div>
+<div id="outline-container-org9531fe8" class="outline-3">
+<h3 id="org9531fe8"><span class="section-number-3">8.1.</span> Sharding Methods</h3>
+<div class="outline-text-3" id="text-8-1">
+</div>
+<div id="outline-container-orgedc3580" class="outline-4">
+<h4 id="orgedc3580"><span class="section-number-4">8.1.1.</span> Key Based Sharding</h4>
+<div class="outline-text-4" id="text-8-1-1">
+<ul class="org-ul">
+<li>Also known as hash-based sharding.</li>
+<li>Primary keys or some unique identifiers are used as input to a hash function which outputs a hash value.</li>
+<li>This hash value is used to determine which shard to refer to.</li>
+<li>You can use consistent hashing here as well.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgd96c47f" class="outline-4">
+<h4 id="orgd96c47f"><span class="section-number-4">8.1.2.</span> Range Based Sharding</h4>
+<div class="outline-text-4" id="text-8-1-2">
+<ul class="org-ul">
+<li>Also known as horizontal sharding.</li>
+<li>Ranges of values are used to determine the target shard.</li>
+<li>For example, all users with first letters of their names from A-P will be stored in shard 1, P-Z in shard 2.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgf70ae93" class="outline-4">
+<h4 id="orgf70ae93"><span class="section-number-4">8.1.3.</span> Vertical Sharding</h4>
+<div class="outline-text-4" id="text-8-1-3">
+<ul class="org-ul">
+<li>Instead of spliting by rows, we split by columns.</li>
+<li>For example, first shard may only store the name column, second shard stores the email column etc..</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org47ae952" class="outline-2">
+<h2 id="org47ae952"><span class="section-number-2">9.</span> Caching</h2>
+<div class="outline-text-2" id="text-9">
+<ul class="org-ul">
+<li>Caching is a technique which allows you to answer frequently asked queries faster.</li>
+<li>It works by storing responses to frequent queries in memory, so that the server won't have to ping the database again and again.</li>
+<li>A cache has limited memory, so you have to choose a <b>cache policy</b> to decide what data to <i>evict</i> from the cache when it's full.</li>
+<li>You already know about two simple cache policies: LRU and LFU.</li>
+<li>In distributed systems, servers use a distributed cache like Redis which is its own independent component in the system.</li>
+<li>Whenever data is requested, the cache is queried first. If data is found (cache hit), it is returned (querying a cache is much faster than querying a DB).</li>
+<li>If the requested data does not exist in the cache, it is known as a cache miss.</li>
+<li>A bad caching policy can cause a lot of cache misses, which is known as "thrashing".</li>
+</ul>
+</div>
+<div id="outline-container-orge06c00f" class="outline-3">
+<h3 id="orge06c00f"><span class="section-number-3">9.1.</span> Types of Cache</h3>
+<div class="outline-text-3" id="text-9-1">
+</div>
+<div id="outline-container-orgfbf4134" class="outline-4">
+<h4 id="orgfbf4134"><span class="section-number-4">9.1.1.</span> Application Server Cache</h4>
+<div class="outline-text-4" id="text-9-1-1">
+<p>
+The server itself has a small cache. The advantage is that the response is instant. The drawback is that each server node has its own cache, so consistency is harder to maintain and maintaining consistency will slow things down.
+<img src="https://media.geeksforgeeks.org/wp-content/uploads/20240212140144/Application-Server-Cache-(1).webp" alt="Application-Server-Cache-(1).webp" />
+</p>
+</div>
+</div>
+<div id="outline-container-org6a796c1" class="outline-4">
+<h4 id="org6a796c1"><span class="section-number-4">9.1.2.</span> Distributed Cache</h4>
+<div class="outline-text-4" id="text-9-1-2">
+<ul class="org-ul">
+<li>Consistent hashing is used to determine which cache node has the requested data.</li>
+<li>Each server can now independently use the distributed cache system.</li>
+</ul>
+
+<div id="orge4b5d2e" class="figure">
+<p><img src="https://media.geeksforgeeks.org/wp-content/uploads/20240110183539/Distributed-Cache.jpg" alt="Distributed-Cache.jpg" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org18b4f89" class="outline-4">
+<h4 id="org18b4f89"><span class="section-number-4">9.1.3.</span> Global Cache</h4>
+<div class="outline-text-4" id="text-9-1-3">
+<ul class="org-ul">
+<li>There's just ONE global cache which is queried whenever data is requested.</li>
+<li>It is the responsibility of the global cache to query the DB in case of a cache miss.</li>
+</ul>
+
+<div id="orgfbddc20" class="figure">
+<p><img src="https://media.geeksforgeeks.org/wp-content/uploads/20240110183609/Global-Cache.jpg" alt="Global-Cache.jpg" />
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org0faa18d" class="outline-2">
+<h2 id="org0faa18d"><span class="section-number-2">10.</span> Single Point of Failure</h2>
+<div class="outline-text-2" id="text-10">
+<ul class="org-ul">
+<li>A single point of failure occurs when you have a system where there is one component which fails and due to that, the entire system goes down.</li>
+<li>So let's say, you just had one server node and for some reason like a power cut, it crashed. Then, the entire application would stop responding to users.</li>
+<li>Single point of failure applies to server nodes, databases, load balancers, or literally anything that is a component of a system.</li>
+</ul>
+</div>
+<div id="outline-container-org4663f30" class="outline-3">
+<h3 id="org4663f30"><span class="section-number-3">10.1.</span> Example</h3>
+<div class="outline-text-3" id="text-10-1">
+<ul class="org-ul">
+<li>Let's say we have a simple system
+<img src="https://i.postimg.cc/yW410TVN/image.png" alt="image.png" /></li>
+<li>If the server fails, the entire system goes down, this is single point of failure.</li>
+<li>To avoid this, we can add multiple server nodes
+<img src="https://i.postimg.cc/J4LtD1t5/image.png" alt="image.png" /></li>
+<li>But how do the clients know now which server to connect to?</li>
+<li>For that, we will add a load balancer.
+<img src="https://i.postimg.cc/vmgG2jcm/image.png" alt="image.png" /></li>
+<li>The server thing is sorted. Yay! But what if the DB goes down? Just add more&#x2026;
+<img src="https://i.postimg.cc/1XJx3cfT/image.png" alt="image.png" />
+This is called a master slave configuration. There are other configurations as well (discussed later)</li>
+<li>Similarly we have to add multiple load balancers as well so that if one goes down, others can work.
+<img src="https://i.postimg.cc/Kjs9W9KZ/image.png" alt="image.png" />
+We also had to add a DNS service which allows clients to connect to a load balancer.</li>
+<li>You may be wondering what if the DNS service goes down? For that we use multiple DNS service providers. Sorted.</li>
+<li>What if the entire application is hosted in Japan and suddenly there's an earthquake? For that, we host our application on different regions.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org1f61917" class="outline-2">
+<h2 id="org1f61917"><span class="section-number-2">11.</span> NoSQL Databases</h2>
+<div class="outline-text-2" id="text-11">
+<ul class="org-ul">
+<li>You've studied about SQL databases in DBMS, you know how they require you to model all relationships as tables.</li>
+<li>SQL databases require normalization/de-normalization to remain performant, which is an added task.</li>
+<li>Many NoSQL databases use a JSON like format, for example, MongoDB.</li>
+<li>Many of them are key-value based, graph based etc..</li>
+</ul>
+</div>
+<div id="outline-container-orgff67a01" class="outline-3">
+<h3 id="orgff67a01"><span class="section-number-3">11.1.</span> Advantages</h3>
+<div class="outline-text-3" id="text-11-1">
+<ul class="org-ul">
+<li>They are horizontally scalable (SQL dbs are vertically scalable).</li>
+<li>They are more available.</li>
+<li>They have a flexible schema, which you can change easily.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org12068eb" class="outline-3">
+<h3 id="org12068eb"><span class="section-number-3">11.2.</span> Disadvantages</h3>
+<div class="outline-text-3" id="text-11-2">
+<ul class="org-ul">
+<li>ACID properties are not guaranteed.</li>
+<li>Less consistency.</li>
+<li>These are not read optimized (SQL DBs are better at reads).</li>
+<li>No information about relations between different entities.</li>
+<li>Joins are hard.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org08a4262" class="outline-3">
+<h3 id="org08a4262"><span class="section-number-3">11.3.</span> When should I use SQL DBs?</h3>
+<div class="outline-text-3" id="text-11-3">
+<ul class="org-ul">
+<li>When you need strong ACID properties. For example, banking systems (transactions), inventory management, payments etc..</li>
+<li>When your data has a fixed, well-defined schema.</li>
+<li>When you require complex queries for analytics (SQL is a powerful language!).</li>
+<li>When data integrity matters.</li>
+<li>When you expect moderate-high read/write consistency.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org0a1ea9f" class="outline-3">
+<h3 id="org0a1ea9f"><span class="section-number-3">11.4.</span> When should I use NoSQL DBs?</h3>
+<div class="outline-text-3" id="text-11-4">
+<ul class="org-ul">
+<li>When you have flexible, evolving schemas or unstructured data. For example, storing analytics, json documents, etc.</li>
+<li>When you need horizontal scaling and partitioning (a lot of horizontally distributed SQL DBs do exist though).</li>
+<li>When you need simple queryies.</li>
+<li><p>
+When you need low latency at massive scale.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c++"><span class="org-preprocessor">#include</span> <span class="org-string"><span class="org-rainbow-delimiters-depth-1">&lt;</span></span><span class="org-string">iostream</span><span class="org-string"><span class="org-rainbow-delimiters-depth-1">&gt;</span></span>
+<span class="org-keyword">using</span> <span class="org-keyword">namespace</span> <span class="org-constant">std</span>;
+
+<span class="org-type">int</span> <span class="org-function-name">main</span><span class="org-rainbow-delimiters-depth-1">()</span> <span class="org-rainbow-delimiters-depth-1">{</span>
+  cout &lt;&lt; <span class="org-string">"HI"</span> &lt;&lt; endl;
+  <span class="org-keyword">return</span> 0;
+<span class="org-rainbow-delimiters-depth-1">}</span>
+</pre>
+</div></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Prayag Jain</p>
+<p class="date">Created: 2025-09-04 Thu 04:46</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
