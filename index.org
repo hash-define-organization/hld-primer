@@ -26,6 +26,7 @@
 * Introduction
 ** High Level Design (HLD)
 It lays out the overall architecture of a system, which describes how components interact with each other, what services exist, and how data flows among them.
+This is where the website is hosted: https://github.com/hash-define-organization/hld-primer
 ** Network Protocols
 A network protocol defines the rules for the communication between two computers.
 *** Application Layer
