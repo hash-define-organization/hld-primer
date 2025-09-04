@@ -1,8 +1,10 @@
-<img src="./banner.png" style="width: 100%">
+<img src="./assets/banner.png" style="width: 100%">
 
 # High Level Design Primer
 <center>
+  
 ![](https://img.shields.io/badge/Take%20Me%20To%20The%20Notes-%E2%86%92-00c0fa?style=for-the-badge&labelColor=016fea&logo=gitbook)
+
 </center>
 These are notes which will give you a good start at understanding high level system design. The first section of the notes discuss the main concepts that you should know about before designing a scalable system. The second section focuses on designing them.
 
