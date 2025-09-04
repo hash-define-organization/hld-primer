@@ -82,13 +82,14 @@ b,strong{
     font-weight:bold}
 
 blockquote{
-    background-color: #F0F0F0;
-    border-left:5px solid #CCCCCC;
+    background-color: #222;
+    border-left:5px solid #00c0fa;
     font-style:italic;
-    line-height:24px;
-    margin:0px 0px 24px 0px;
-    /* margin-left:24px; */
-    padding: 6px 20px;
+    padding: 1rem 2rem;
+}
+
+blockquote p {
+    margin: 0;
 }
 
 ul,ol,dl{
@@ -309,7 +310,7 @@ code{
     border-radius: 4px;
     /* color:#000;  for clickable code */
     font-family: "Space Mono", consolas, monospace;
-    font-size:100%;
+    font-size:85%;
     max-width:100%;
     overflow-x:auto;
     padding:0 5px;
@@ -689,9 +690,6 @@ a:hover,a:active{
 
 a:hover{
     color:#3091d1}
-
-a:visited{
-    color:#9B59B6}
 
 .left{
     text-align:left}
